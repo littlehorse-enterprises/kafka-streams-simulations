@@ -26,10 +26,10 @@ public class RandomValueProcessor implements Processor<String, Bytes, String, By
 
     @Override
     public void process(Record<String, Bytes> record) {
-//        if(record.key().equalsIgnoreCase("fail") && record.timestamp() > lastFailure.get()) {
-//            lastFailure.set(record.timestamp());
-//            throw new ProducerFencedException("Injected exception");
-//        }
+        if(record.key().equalsIgnoreCase("fail") && record.timestamp() > lastFailure.get()) {
+            lastFailure.set(record.timestamp());
+            throw new RuntimeException("Injected exception");
+        }
         store.put(record.key(), record.value());
     }
 }

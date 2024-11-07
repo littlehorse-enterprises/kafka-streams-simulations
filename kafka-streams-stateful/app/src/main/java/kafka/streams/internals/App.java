@@ -12,6 +12,7 @@ import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.state.KeyValueStore;
@@ -39,9 +40,10 @@ public class App {
         boolean usesDsl = AppConfig.usesDsl(args);
         Topology topology = usesDsl ? buildDslTopology() : buildProcessorTopology();
         final KafkaStreams streams = new KafkaStreams(topology, props);
-        streams.setGlobalStateRestoreListener(new AppRestoreListener());
+        streams.setUncaughtExceptionHandler(exception -> StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_CLIENT);
+//        streams.setGlobalStateRestoreListener(new AppRestoreListener());
         HttpHandler httpHandler = new HttpHandler(streams, AppConfig.usesDsl(args));
-        Javalin httpServer = Javalin.create().start(AppConfig.httpPort(args));
+        Javalin httpServer = Javalin.create().start(AppConfig.httpPort(AppConfig.httpConfig(args)));
         httpServer.get("/state", httpHandler::state);
 
         CountDownLatch latch = new CountDownLatch(2);
