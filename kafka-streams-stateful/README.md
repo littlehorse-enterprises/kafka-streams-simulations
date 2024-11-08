@@ -37,7 +37,7 @@ docker compose restart
 ### Run data generator
 
 ```shell
-./generate.sh
+./generate.sh app1
 ```
 
 ### Monitor kafka topics:
