@@ -31,7 +31,7 @@ docker compose restart
 ### Run instances
 
 ```shell
-./gradlew runApp
+./run.sh app1
 ```
 
 ### Run data generator
@@ -43,5 +43,5 @@ docker compose restart
 ### Monitor kafka topics:
 
 ```shell
-kaskade admin -b localhost:9092
+kaskade admin -b localhost:19092
 ```

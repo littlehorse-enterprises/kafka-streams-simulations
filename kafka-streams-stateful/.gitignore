@@ -27,3 +27,6 @@ gradle-app.setting
 
 # VS Code
 bin/
+
+# Logs
+*.log
