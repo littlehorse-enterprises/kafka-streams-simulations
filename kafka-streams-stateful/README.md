@@ -1,4 +1,3 @@
-
 ### Deploy kafka cluster
 
 ```shell
@@ -8,19 +7,19 @@ docker compose up -d
 ### Setup kafka
 
 ```shell
-docker exec -it lh-kafka /setup.sh app
+docker compose exec -it cli /setup.sh app
 ```
 
 If you need to change the quotas config:
 
 ```shell
-docker exec -it lh-kafka /setup.sh quotas <allowed_rate> <numer_of_stream_threads>
+docker compose exec -it cli /setup.sh quotas <allowed_rate> <numer_of_stream_threads>
 ```
 
 For example:
 
 ```shell
-docker exec -it lh-kafka /setup.sh quotas 45825 5
+docker compose exec -it cli /setup.sh quotas 45825 5
 ```
 
 Don't forget to restart your kafka brokers:
@@ -29,8 +28,8 @@ Don't forget to restart your kafka brokers:
 docker compose restart
 ```
 
-
 ### Run instances
+
 ```shell
 ./gradlew runApp
 ```
@@ -38,16 +37,11 @@ docker compose restart
 ### Run data generator
 
 ```shell
-gradle -PmainClass=kafka.streams.internals.FakeDataGenerator run
+./gradlew -PmainClass=kafka.streams.internals.FakeDataGenerator run
 ```
 
 ### Monitor kafka topics:
+
 ```shell
 kaskade admin -b localhost:9092
-```
-
-### Setup kafka topics
-
-```shell
-docker exec -it lh-kafka /setup.sh
 ```

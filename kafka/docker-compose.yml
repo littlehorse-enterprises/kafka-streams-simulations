@@ -1,12 +1,4 @@
 services:
-  cli:
-    image: apache/kafka:${KAFKA_VERSION}
-    volumes:
-      - ./setup.sh:/setup.sh
-    entrypoint: /bin/bash
-    tty: true
-    environment:
-      BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092,kafka3:9092
   kafka1:
     image: apache/kafka:${KAFKA_VERSION}
     environment:
