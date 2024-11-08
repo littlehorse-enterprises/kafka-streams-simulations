@@ -1,5 +1,5 @@
 include:
-  - ../kafka/mononode.yml
+  - ../kafka/multinode.yml
 services:
   cli:
     image: apache/kafka:${KAFKA_VERSION}
