@@ -37,7 +37,7 @@ docker compose restart
 ### Run data generator
 
 ```shell
-./gradlew -PmainClass=kafka.streams.internals.FakeDataGenerator run
+./generate.sh
 ```
 
 ### Monitor kafka topics:
