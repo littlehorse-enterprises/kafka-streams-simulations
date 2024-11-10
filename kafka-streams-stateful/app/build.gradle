@@ -35,7 +35,7 @@ jar {
     duplicatesStrategy DuplicatesStrategy.INCLUDE
     manifest {
         attributes(
-            'Main-Class': 'kafka.streams.internals.App'
+            'Main-Class': 'io.littlehorse.simulations.stateful.app.App'
         )
     }
 }
@@ -45,7 +45,7 @@ application {
 }
 
 task runApp(type: JavaExec) {
-    mainClass = 'kafka.streams.internals.App'
+    mainClass = 'io.littlehorse.simulations.stateful.app.App'
     def configFile = project.hasProperty('config') ? project.config : 'instance1.properties'
     def port = project.hasProperty('port') ? project.port : '8080'
     args = [configFile, port]

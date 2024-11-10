@@ -1,4 +1,4 @@
-package kafka.streams.internals;
+package io.littlehorse.simulations.stateful.app;
 
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.streams.processor.StateRestoreListener;

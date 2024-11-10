@@ -1,4 +1,4 @@
-package kafka.streams.internals.dto;
+package io.littlehorse.simulations.stateful.app.dto;
 
 import java.util.Collection;
 import java.util.List;

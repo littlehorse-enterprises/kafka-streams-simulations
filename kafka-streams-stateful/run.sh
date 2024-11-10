@@ -18,6 +18,6 @@ if [ ! -f "$CONFIG_PATH" ]; then
   exit 1
 fi
 
-./gradlew clean installDist -x test -PmainClass=kafka.streams.internals.App
+./gradlew clean installDist -x test -PmainClass=io.littlehorse.simulations.stateful.app.App
 
 app/build/install/app/bin/app "$CONFIG_PATH" > "${CONFIG_NAME}".log

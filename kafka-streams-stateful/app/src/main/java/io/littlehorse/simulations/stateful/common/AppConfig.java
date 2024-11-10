@@ -1,4 +1,4 @@
-package kafka.streams.internals;
+package io.littlehorse.simulations.stateful.common;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -16,6 +16,8 @@ public class AppConfig {
 
     private static final String STREAMS_CONFIG_PREFIX = "streams.";
     private static final String HTTP_CONFIG_PREFIX = "http.";
+    public static final String INPUT_TOPIC = "input-topic";
+    public static final String OUTPUT_TOPIC = "output-topic";
 
     private AppConfig(){}
 
@@ -98,7 +100,7 @@ public class AppConfig {
 //                System.out.println("Warning: Some command line arguments were ignored. This demo only accepts an optional configuration file.");
 //            }
 //        }
-        props.putIfAbsent(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        props.putIfAbsent(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:19092");
         props.putIfAbsent(ProducerConfig.CLIENT_ID_CONFIG, "my-app");
         props.putIfAbsent(ProducerConfig.PARTITIONER_IGNORE_KEYS_CONFIG, "true");
         //props.putIfAbsent(ProducerConfig.LINGER_MS_CONFIG, "50");

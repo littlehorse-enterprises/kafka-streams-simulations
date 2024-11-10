@@ -1,4 +1,4 @@
-package kafka.streams.internals;
+package io.littlehorse.simulations.stateful.app;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class HttpHandler {
             try(KeyValueIterator<String, Bytes> records = store.all()) {
                 while (records.hasNext()) {
                     KeyValue<String, Bytes> next = records.next();
-                    currentState.put(next.key, format.format(next.value.get().length));
+                    currentState.put(next.key, String.valueOf(next.value.get().length));
                 }
             }
         }else {

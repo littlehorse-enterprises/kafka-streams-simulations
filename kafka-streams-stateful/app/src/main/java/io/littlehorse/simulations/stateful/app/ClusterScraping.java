@@ -1,22 +1,20 @@
-package kafka.streams.internals;
+package io.littlehorse.simulations.stateful.app;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Streams;
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import io.javalin.Javalin;
 import io.javalin.http.ContentType;
 import io.javalin.http.Context;
-import kafka.streams.internals.dto.Cluster;
-import kafka.streams.internals.dto.Node;
-import kafka.streams.internals.dto.NodeStatus;
+import io.littlehorse.simulations.stateful.app.dto.Cluster;
+import io.littlehorse.simulations.stateful.app.dto.Node;
+import io.littlehorse.simulations.stateful.app.dto.NodeStatus;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;

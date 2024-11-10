@@ -1,4 +1,4 @@
-package kafka.streams.internals;
+package io.littlehorse.simulations.stateful.app;
 
 import net.datafaker.Faker;
 import net.datafaker.service.RandomService;
@@ -12,6 +12,7 @@ public final class Util {
     private Util(){}
 
     public static Bytes randomBytes() {
+        // random 10KB - 20KB
         return new Bytes(RANDOM.nextRandomBytes(RANDOM.nextInt(10000, 20000)));
     }
 

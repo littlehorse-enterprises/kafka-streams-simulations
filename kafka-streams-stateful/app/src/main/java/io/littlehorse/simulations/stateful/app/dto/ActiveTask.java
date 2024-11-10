@@ -1,23 +1,29 @@
-package kafka.streams.internals.dto;
+package io.littlehorse.simulations.stateful.app.dto;
 
-public class StandbyTask {
+public class ActiveTask {
 
     private String id;
+    private String threadName;
     private long latestOffset;
     private long currentOffset;
 
-    public StandbyTask(String id, long latestOffset, long currentOffset) {
+    public ActiveTask(String id, String threadName, long latestOffset, long currentOffset) {
         this.id = id;
+        this.threadName = threadName;
         this.latestOffset = latestOffset;
         this.currentOffset = currentOffset;
     }
 
-    public StandbyTask(){
+    public ActiveTask(){
 
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getThreadName() {
+        return threadName;
     }
 
     public long getLatestOffset() {
