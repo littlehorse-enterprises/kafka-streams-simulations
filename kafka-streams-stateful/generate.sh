@@ -18,6 +18,8 @@ if [ ! -f "$CONFIG_PATH" ]; then
   exit 1
 fi
 
+# TODO: add argument ptocessor for --fail parameter
+
 ./gradlew clean installDist -x test -PmainClass=io.littlehorse.simulations.stateful.generator.FakeDataGenerator
 
 app/build/install/app/bin/app "$CONFIG_PATH"

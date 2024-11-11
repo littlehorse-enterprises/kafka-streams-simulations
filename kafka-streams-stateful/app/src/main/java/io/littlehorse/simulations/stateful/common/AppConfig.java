@@ -92,14 +92,14 @@ public class AppConfig {
 
     public static Properties producerConfig(String[] appArgs) throws IOException{
         final Properties props = new Properties();
-//        if (appArgs != null && appArgs.length > 0) {
-//            try (final FileInputStream fis = new FileInputStream(appArgs[0])) {
-//                props.load(fis);
-//            }
-//            if (appArgs.length > 3) {
-//                System.out.println("Warning: Some command line arguments were ignored. This demo only accepts an optional configuration file.");
-//            }
-//        }
+       if (appArgs != null && appArgs.length > 0) {
+           try (final FileInputStream fis = new FileInputStream(appArgs[0])) {
+               props.load(fis);
+           }
+           if (appArgs.length > 3) {
+               System.out.println("Warning: Some command line arguments were ignored. This demo only accepts an optional configuration file.");
+           }
+       }
         props.putIfAbsent(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:19092");
         props.putIfAbsent(ProducerConfig.CLIENT_ID_CONFIG, "my-app");
         props.putIfAbsent(ProducerConfig.PARTITIONER_IGNORE_KEYS_CONFIG, "true");

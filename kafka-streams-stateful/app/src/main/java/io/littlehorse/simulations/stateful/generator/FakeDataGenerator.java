@@ -24,7 +24,8 @@ public class FakeDataGenerator {
 
     public static void main(String[] args) throws IOException {
         boolean fail = false;
-        if (args.length > 0) {
+        // TODO: add argument processor
+        if (args.length > 1) {
             fail = true;
         }
 
