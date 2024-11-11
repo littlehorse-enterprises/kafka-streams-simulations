@@ -17,11 +17,13 @@ dependencies {
     implementation "org.apache.kafka:kafka-streams:${kafkaVersion}"
     implementation "org.apache.kafka:kafka-clients:${kafkaVersion}"
 
-    implementation 'org.slf4j:slf4j-simple:2.0.9'
-    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'org.slf4j:slf4j-api:2.0.16'
+    implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.24.1'
+
+    implementation 'com.google.guava:guava:33.3.1-jre'
     implementation 'org.freemarker:freemarker:2.3.32'
     implementation 'net.datafaker:datafaker:2.0.1'
-    implementation 'io.javalin:javalin:5.6.2'
+    implementation 'io.javalin:javalin:6.3.0'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.3'
 }
 

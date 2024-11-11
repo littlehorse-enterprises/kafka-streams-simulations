@@ -57,7 +57,7 @@ public class App {
         Runtime.getRuntime().addShutdownHook(new Thread("http-server-shutdown-hook") {
             @Override
             public void run() {
-                httpServer.close();
+                httpServer.stop();
                 latch.countDown();
             }
         });
