@@ -4,6 +4,7 @@ set -e
 
 if [[ $# -lt 2 ]]; then
     echo "USAGE: ./set-quotas.sh <allowed rate in bytes> <client id>"
+    exit 1
 fi
 
 allowed_rate=$1

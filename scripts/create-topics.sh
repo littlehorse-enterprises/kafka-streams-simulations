@@ -4,6 +4,7 @@ set -e
 
 if [[ $# -lt 3 ]]; then
     echo "USAGE: ./create-topics.sh <partitions> <replication factor> <topic 1> <topic 2> ..."
+    exit 1
 fi
 
 partitions=$1
