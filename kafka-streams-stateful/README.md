@@ -19,12 +19,6 @@ for n in {1..5}; do \
     docker compose exec -it cli /scripts/set-quotas.sh 45000 app1-StreamThread-$n-restore-consumer; done
 ```
 
-Don't forget to restart your kafka brokers:
-
-```shell
-docker compose restart
-```
-
 ### Run instances
 
 ```shell
