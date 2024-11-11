@@ -3,7 +3,7 @@
 set -e
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-WORK_DIR=$(cd "$SCRIPT_DIR/.." && pwd)
+cd $SCRIPT_DIR
 
 export APP_NAME="generate"
 
@@ -22,4 +22,4 @@ fi
 
 ./gradlew clean installDist -x test -PmainClass=io.littlehorse.simulations.stateful.generator.FakeDataGenerator
 
-app/build/install/app/bin/app "$CONFIG_PATH"
+./app/build/install/app/bin/app "$CONFIG_PATH"

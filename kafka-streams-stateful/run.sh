@@ -3,7 +3,7 @@
 set -e
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-WORK_DIR=$(cd "$SCRIPT_DIR/.." && pwd)
+cd $SCRIPT_DIR
 
 export APP_NAME="app1"
 
@@ -18,6 +18,8 @@ if [ ! -f "$CONFIG_PATH" ]; then
   exit 1
 fi
 
+# TODO: flag --install
+
 ./gradlew clean installDist -x test -PmainClass=io.littlehorse.simulations.stateful.app.App
 
-app/build/install/app/bin/app "$CONFIG_PATH"
+./app/build/install/app/bin/app "$CONFIG_PATH"
