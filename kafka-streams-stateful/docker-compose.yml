@@ -1,12 +1,25 @@
 include:
   - ../kafka/multinode.yml
 services:
+  setup:
+    image: apache/kafka:${KAFKA_VERSION}
+    volumes:
+      - ../scripts:/scripts
+      - ./setup.sh:/setup.sh
+    entrypoint: /setup.sh
+    environment:
+      BOOTSTRAP_SERVERS: kafka1:9092
+    depends_on:
+      kafka1:
+        condition: service_healthy
   cli:
     image: apache/kafka:${KAFKA_VERSION}
     volumes:
-      - ./setup.sh:/setup.sh
+      - ../scripts:/scripts
     entrypoint: /bin/bash
     tty: true
     environment:
       BOOTSTRAP_SERVERS: kafka1:9092
- 
+    depends_on:
+      kafka1:
+        condition: service_healthy

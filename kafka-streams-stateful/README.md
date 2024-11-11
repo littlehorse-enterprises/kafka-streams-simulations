@@ -4,22 +4,19 @@
 docker compose up -d
 ```
 
-### Setup kafka
-
-```shell
-docker compose exec -it cli /setup.sh app
-```
+### Update quotas
 
 If you need to change the quotas config:
 
 ```shell
-docker compose exec -it cli /setup.sh quotas <allowed_rate> <numer_of_stream_threads>
+docker compose exec -it cli /scripts/set-quotas.sh <allowed rate in bytes> <client id>
 ```
 
 For example:
 
 ```shell
-docker compose exec -it cli /setup.sh quotas 45825 5
+for n in {1..5}; do \
+    docker compose exec -it cli /scripts/set-quotas.sh 45000 app1-StreamThread-$n-restore-consumer; done
 ```
 
 Don't forget to restart your kafka brokers:
@@ -37,7 +34,7 @@ docker compose restart
 ### Run data generator
 
 ```shell
-./generate.sh app1
+./generate.sh
 ```
 
 ### Monitor kafka topics:
