@@ -5,13 +5,13 @@ set -e
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 WORK_DIR=$(cd "$SCRIPT_DIR/.." && pwd)
 
-CONFIG_NAME="app1"
+export APP_NAME="generate"
 
 if [ -n "$1" ]; then
-  CONFIG_NAME="$1"
+  export APP_NAME="$1"
 fi
 
-CONFIG_PATH="${SCRIPT_DIR}/dev/${CONFIG_NAME}.config"
+CONFIG_PATH="${SCRIPT_DIR}/dev/${APP_NAME}.config"
 
 if [ ! -f "$CONFIG_PATH" ]; then
   echo "$CONFIG_PATH does not exist."
