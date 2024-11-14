@@ -17,6 +17,9 @@ while [ $# -gt 0 ]; do
     --debug)
         export LOG_LEVEL="DEBUG"
         ;;
+    --dsl)
+        ARGUMENTS="--dsl"
+        ;;
     *)
         export APP_NAME="$1"
         ;;
@@ -31,4 +34,4 @@ if [ ! -f "${CONFIG_PATH}" ]; then
     exit 1
 fi
 
-./app/build/install/app/bin/app streams ${CONFIG_PATH}
+./app/build/install/app/bin/app streams ${ARGUMENTS} ${CONFIG_PATH}
