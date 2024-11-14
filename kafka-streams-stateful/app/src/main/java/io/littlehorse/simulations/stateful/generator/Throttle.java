@@ -25,7 +25,7 @@ public class Throttle implements Closeable, Runnable {
         executor.start();
     }
 
-    public void await(final Runnable callback) {
+    public void maybeWait(final Runnable callback) {
         if (awaiting.get()) {
             for (; ; ) {
                 if (!awaiting.get()) {

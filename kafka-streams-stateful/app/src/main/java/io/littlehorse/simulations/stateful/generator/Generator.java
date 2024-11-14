@@ -50,7 +50,7 @@ public class Generator implements Runnable {
                             .forEach(record -> {
                                 producer.send(record);
                                 log.debug("Produced messages: {}", incrementer.incrementAndGet());
-                                throttle.await(() -> log.info("Produced messages so far: {}", incrementer.get()));
+                                throttle.maybeWait(() -> log.info("Produced messages so far: {}", incrementer.get()));
                             });
                 }
             }
