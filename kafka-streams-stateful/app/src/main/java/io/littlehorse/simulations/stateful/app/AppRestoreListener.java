@@ -9,16 +9,16 @@ public class AppRestoreListener implements StateRestoreListener {
 
     @Override
     public void onRestoreStart(TopicPartition topicPartition, String storeName, long startingOffset, long endingOffset) {
-        log.info("Starting restoration. StoreName {}", storeName);
+        log.debug("Starting restoration. StoreName {}", storeName);
     }
 
     @Override
     public void onBatchRestored(TopicPartition topicPartition, String storeName, long batchEndOffset, long numRestored) {
-        log.info("Batch restored. StoreName {} restored {} records", storeName, numRestored);
+        log.debug("Batch restored. StoreName {} restored {} records", storeName, numRestored);
     }
 
     @Override
     public void onRestoreEnd(TopicPartition topicPartition, String storeName, long totalRestored) {
-        log.info("Restore end. StoreName {}", storeName);
+        log.debug("Restore end. StoreName {}", storeName);
     }
 }
