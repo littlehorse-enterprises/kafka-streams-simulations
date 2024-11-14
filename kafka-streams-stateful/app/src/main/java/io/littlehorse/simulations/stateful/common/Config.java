@@ -28,7 +28,6 @@ public class Config {
         props.putIfAbsent(StreamsConfig.CLIENT_ID_CONFIG, "my-app");
         props.putIfAbsent(StreamsConfig.APPLICATION_ID_CONFIG, "streams-number-aggregation-demo");
         props.putIfAbsent(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        props.putIfAbsent(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
         props.putIfAbsent(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.putIfAbsent(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Bytes().getClass().getName());
         props.putIfAbsent(StreamsConfig.STATE_DIR_CONFIG, "/tmp/streams-1");
