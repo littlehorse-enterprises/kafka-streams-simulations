@@ -34,9 +34,9 @@ import java.util.concurrent.CountDownLatch;
 @Command(name = "streams", description = "Kafka streams example app.")
 public class App implements Runnable {
 
-    public static final List<NewTopic> TOPICS = List.of(new NewTopic(Config.INPUT_TOPIC, 15, (short) 1), new NewTopic(Config.OUTPUT_TOPIC, 15, (short) 1));
-    public static final String DSL_STORE_NAME = "dsl-store";
-    public static final String PROCESSOR_STORE_NAME = "processor-state";
+    private static final List<NewTopic> TOPICS = List.of(new NewTopic(Config.INPUT_TOPIC, 15, (short) 1), new NewTopic(Config.OUTPUT_TOPIC, 15, (short) 1));
+    private static final String DSL_STORE_NAME = "dsl-store";
+    private static final String PROCESSOR_STORE_NAME = "processor-state";
     @Option(names = {"-d", "--dsl"}, description = "Use DSL.")
     private boolean dsl;
     @Parameters(description = "Properties file path.")

@@ -33,10 +33,10 @@ public class StateExporter implements Closeable {
         final State state = new State(streams.state().toString(), data);
 
         if (streams.state() == KafkaStreams.State.RUNNING) {
-            ReadOnlyKeyValueStore<String, Bytes> store = streams.store(StoreQueryParameters.fromNameAndType(storeName, QueryableStoreTypes.keyValueStore()));
+            final ReadOnlyKeyValueStore<String, Bytes> store = streams.store(StoreQueryParameters.fromNameAndType(storeName, QueryableStoreTypes.keyValueStore()));
             try (KeyValueIterator<String, Bytes> records = store.all()) {
                 while (records.hasNext()) {
-                    KeyValue<String, Bytes> next = records.next();
+                    final KeyValue<String, Bytes> next = records.next();
                     data.put(next.key, next.value.get().length);
                 }
             }

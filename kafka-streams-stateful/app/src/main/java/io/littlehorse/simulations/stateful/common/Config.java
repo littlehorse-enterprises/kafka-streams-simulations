@@ -16,7 +16,7 @@ public class Config {
 
     public static final String INPUT_TOPIC = "input-topic";
     public static final String OUTPUT_TOPIC = "output-topic";
-    public static final String SERVER_PORT = "server.port";
+    private static final String SERVER_PORT = "server.port";
     private static final String STREAMS_CONFIG_PREFIX = "streams.";
     private static final String HTTP_CONFIG_PREFIX = "http.";
 
