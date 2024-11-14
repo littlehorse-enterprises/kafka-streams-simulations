@@ -41,7 +41,7 @@ public class Generator implements Runnable {
     public void run() {
         try (Producer<String, Bytes> producer = new KafkaProducer<>(Config.producer(configurations))) {
             if (fail) {
-                producer.send(failSignal());
+                producer.send(failSignal()).get();
             } else {
                 try (Throttle throttle = new Throttle(Duration.ofSeconds(5), Duration.ofSeconds(1))) {
                     final AtomicLong incrementer = new AtomicLong(0);
