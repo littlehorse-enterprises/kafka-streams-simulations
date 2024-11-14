@@ -23,6 +23,7 @@ import org.apache.kafka.streams.state.Stores;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
 
 import java.io.File;
 import java.util.List;
@@ -38,7 +39,7 @@ public class App implements Runnable {
     public static final String PROCESSOR_STORE_NAME = "processor-state";
     @Option(names = {"-d", "--dsl"}, description = "Use DSL.")
     private boolean dsl;
-    @CommandLine.Parameters(description = "Properties file path.")
+    @Parameters(description = "Properties file path.")
     private File configurations;
 
     private static Topology buildDslTopology() {
