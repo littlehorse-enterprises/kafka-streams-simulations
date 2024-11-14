@@ -10,30 +10,25 @@ import org.apache.kafka.streams.StreamsConfig;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Properties;
 
-public class AppConfig {
+public class Config {
 
     public static final String INPUT_TOPIC = "input-topic";
     public static final String OUTPUT_TOPIC = "output-topic";
-
+    public static final String SERVER_PORT = "server.port";
     private static final String STREAMS_CONFIG_PREFIX = "streams.";
     private static final String HTTP_CONFIG_PREFIX = "http.";
 
-    private AppConfig() {
+    private Config() {
     }
 
-    public static Properties streamsConfig(String[] appArgs) throws IOException {
+    public static Properties streams(final File file) throws IOException {
         Properties props = new Properties();
-        if (appArgs != null && appArgs.length > 0) {
-            try (final FileInputStream fis = new FileInputStream(Paths.get(appArgs[0]).toFile())) {
-                props.load(fis);
-            }
-            if (appArgs.length > 1) {
-                System.out.println("Warning: Some command line arguments were ignored. This demo only accepts an optional configuration file.");
-            }
+        try (FileInputStream fis = new FileInputStream(file)) {
+            props.load(fis);
         }
+
         props = filterByPrefix(props, STREAMS_CONFIG_PREFIX);
         props.putIfAbsent(StreamsConfig.CLIENT_ID_CONFIG, "my-app");
         props.putIfAbsent(StreamsConfig.APPLICATION_ID_CONFIG, "streams-number-aggregation-demo");
@@ -52,21 +47,6 @@ public class AppConfig {
         return props;
     }
 
-    public static Properties httpConfig(String[] appArgs) throws IOException {
-        Properties props = new Properties();
-        if (appArgs != null && appArgs.length > 0) {
-            try (final FileInputStream fis = new FileInputStream(Paths.get(appArgs[0]).toFile())) {
-                props.load(fis);
-            }
-            if (appArgs.length > 1) {
-                System.out.println("Warning: Some command line arguments were ignored. This demo only accepts an optional configuration file.");
-            }
-        }
-        props = filterByPrefix(props, HTTP_CONFIG_PREFIX);
-        props.putIfAbsent("server.port", "8080");
-        return props;
-    }
-
     private static Properties filterByPrefix(Properties props, String prefix) {
         Properties out = new Properties();
         props.entrySet().stream()
@@ -75,26 +55,23 @@ public class AppConfig {
         return out;
     }
 
-    public static int httpPort(Properties appArgs) {
-        return Integer.parseInt(appArgs.get("server.port").toString());
-    }
+    public static int httpPort(final File file) throws IOException {
+        Properties props = new Properties();
 
-    public static boolean usesDsl(String[] appArgs) {
-        if (appArgs != null && appArgs.length > 2) {
-            String arg = appArgs[2];
-            if (!arg.equalsIgnoreCase("dsl") && !arg.equalsIgnoreCase("processor")) {
-                throw new IllegalArgumentException("Only dsl or processor arguments are supported.");
-            }
-            return arg.equalsIgnoreCase("dsl");
-        } else {
-            return false;
+        try (FileInputStream fis = new FileInputStream(file)) {
+            props.load(fis);
         }
+
+        props = filterByPrefix(props, HTTP_CONFIG_PREFIX);
+        props.putIfAbsent(SERVER_PORT, "8080");
+
+        return Integer.parseInt(props.get(SERVER_PORT).toString());
     }
 
-    public static Properties producerConfig(final File inputFile) throws IOException {
+    public static Properties producer(final File inputFile) throws IOException {
         final Properties props = new Properties();
 
-        try (final FileInputStream fis = new FileInputStream(inputFile)) {
+        try (FileInputStream fis = new FileInputStream(inputFile)) {
             props.load(fis);
         }
 

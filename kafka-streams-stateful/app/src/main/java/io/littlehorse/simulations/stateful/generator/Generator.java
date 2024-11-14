@@ -1,6 +1,6 @@
 package io.littlehorse.simulations.stateful.generator;
 
-import io.littlehorse.simulations.stateful.common.AppConfig;
+import io.littlehorse.simulations.stateful.common.Config;
 import io.littlehorse.simulations.stateful.utils.Random;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @Command(name = "generator", description = "Generate fake messages.")
-public class FakeDataGenerator implements Runnable {
+public class Generator implements Runnable {
 
     @Option(names = {"-l", "--limit"}, defaultValue = "200000000", description = "Number of messages to produce. Default: ${DEFAULT-VALUE}.")
     private long limit;
@@ -29,22 +29,22 @@ public class FakeDataGenerator implements Runnable {
     private File configurations;
 
     private ProducerRecord<String, Bytes> newRecord() {
-        return new ProducerRecord<>(AppConfig.INPUT_TOPIC, Random.key(), Random.bytes(5));
+        return new ProducerRecord<>(Config.INPUT_TOPIC, Random.key(), Random.bytes(5));
     }
 
     private ProducerRecord<String, Bytes> failSignal() {
-        return new ProducerRecord<>(AppConfig.INPUT_TOPIC, "fail", Random.bytes(5));
+        return new ProducerRecord<>(Config.INPUT_TOPIC, "fail", Random.bytes(5));
     }
 
     @SneakyThrows
     @Override
     public void run() {
-        try (Producer<String, Bytes> producer = new KafkaProducer<>(AppConfig.producerConfig(configurations))) {
+        try (Producer<String, Bytes> producer = new KafkaProducer<>(Config.producer(configurations))) {
             if (fail) {
                 producer.send(failSignal());
             } else {
                 try (Throttle throttle = new Throttle(Duration.ofSeconds(3), Duration.ofSeconds(10))) {
-                    AtomicLong incrementer = new AtomicLong(0);
+                    final AtomicLong incrementer = new AtomicLong(0);
                     Stream.generate(this::newRecord)
                             .limit(limit)
                             .forEach(record -> {

@@ -1,25 +1,24 @@
 package io.littlehorse.simulations.stateful.app;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.streams.processor.StateRestoreListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+@Slf4j
 public class AppRestoreListener implements StateRestoreListener {
-    private final Logger log = LoggerFactory.getLogger(AppRestoreListener.class);
 
     @Override
     public void onRestoreStart(TopicPartition topicPartition, String storeName, long startingOffset, long endingOffset) {
-        log.info("Starting restoration. StoreName " + storeName);
+        log.info("Starting restoration. StoreName {}", storeName);
     }
 
     @Override
     public void onBatchRestored(TopicPartition topicPartition, String storeName, long batchEndOffset, long numRestored) {
-        log.info("Batch restored. StoreName %s Restored records= %s".formatted(storeName, numRestored));
+        log.info("Batch restored. StoreName {} restored {} records", storeName, numRestored);
     }
 
     @Override
     public void onRestoreEnd(TopicPartition topicPartition, String storeName, long totalRestored) {
-        log.info("Restore end. StoreName %s".formatted(storeName));
+        log.info("Restore end. StoreName {}", storeName);
     }
 }

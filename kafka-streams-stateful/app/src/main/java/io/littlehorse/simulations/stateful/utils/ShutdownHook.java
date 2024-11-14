@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ShutdownHook {
-    private ShutdownHook() {}
+    private ShutdownHook() {
+    }
 
     public static void add(final AutoCloseable closeable) {
         add(closeable.getClass().getSimpleName(), closeable);
@@ -17,7 +18,7 @@ public class ShutdownHook {
             } catch (Exception e) {
                 log.error("Error in ShutdownHook '{}'", name, e);
             }
-            log.trace("Shutdown process for '{}' was completed", name);
+            log.debug("Shutdown process for '{}' was completed", name);
         }));
     }
 }

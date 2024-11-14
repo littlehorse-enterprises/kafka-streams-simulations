@@ -23,7 +23,7 @@ public final class Random {
         return new Bytes(RANDOM.nextRandomBytes(size));
     }
 
-    public static String key(){
+    public static String key() {
         return FAKER.starWars().character();
     }
 
