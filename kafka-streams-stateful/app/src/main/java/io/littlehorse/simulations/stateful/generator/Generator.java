@@ -43,7 +43,7 @@ public class Generator implements Runnable {
             if (fail) {
                 producer.send(failSignal());
             } else {
-                try (Throttle throttle = new Throttle(Duration.ofSeconds(3), Duration.ofSeconds(10))) {
+                try (Throttle throttle = new Throttle(Duration.ofSeconds(5), Duration.ofSeconds(1))) {
                     final AtomicLong incrementer = new AtomicLong(0);
                     Stream.generate(this::newRecord)
                             .limit(limit)
