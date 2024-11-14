@@ -1,25 +1,35 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 cd $SCRIPT_DIR
 
-export APP_NAME="generate"
+export APP_NAME="generator"
+export LOG_LEVEL="INFO"
 
-if [ -n "$1" ]; then
-    export APP_NAME="$1"
-fi
+CONFIG_PATH="${SCRIPT_DIR}/configs/${APP_NAME}.config"
 
-CONFIG_PATH="${SCRIPT_DIR}/dev/${APP_NAME}.config"
-
-if [ ! -f "$CONFIG_PATH" ]; then
-    echo "$CONFIG_PATH does not exist."
+if [ ! -f "${CONFIG_PATH}" ]; then
+    echo "${CONFIG_PATH} does not exist."
     exit 1
 fi
 
-# TODO: add argument ptocessor for --fail parameter
+ARGUMENTS=""
 
-./gradlew clean installDist -x test -PmainClass=io.littlehorse.simulations.stateful.generator.FakeDataGenerator
+while [ $# -gt 0 ]; do
+    case "$1" in
+    --build)
+        ./gradlew clean installDist -x test
+        ;;
+    --debug)
+        export LOG_LEVEL="DEBUG"
+        ;;
+    *)
+        ARGUMENTS="${ARGUMENTS} $1"
+        ;;
+    esac
+    shift
+done
 
-./app/build/install/app/bin/app "$CONFIG_PATH"
+./app/build/install/app/bin/app generator ${ARGUMENTS} ${CONFIG_PATH}

@@ -7,6 +7,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.streams.StreamsConfig;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -14,12 +15,14 @@ import java.util.Properties;
 
 public class AppConfig {
 
-    private static final String STREAMS_CONFIG_PREFIX = "streams.";
-    private static final String HTTP_CONFIG_PREFIX = "http.";
     public static final String INPUT_TOPIC = "input-topic";
     public static final String OUTPUT_TOPIC = "output-topic";
 
-    private AppConfig(){}
+    private static final String STREAMS_CONFIG_PREFIX = "streams.";
+    private static final String HTTP_CONFIG_PREFIX = "http.";
+
+    private AppConfig() {
+    }
 
     public static Properties streamsConfig(String[] appArgs) throws IOException {
         Properties props = new Properties();
@@ -68,9 +71,7 @@ public class AppConfig {
         Properties out = new Properties();
         props.entrySet().stream()
                 .filter(configEntry -> configEntry.getKey().toString().startsWith(prefix))
-                .forEach(validConfigEntry -> {
-                    out.put(validConfigEntry.getKey().toString().replace(prefix, ""), validConfigEntry.getValue());
-                });
+                .forEach(validConfigEntry -> out.put(validConfigEntry.getKey().toString().replace(prefix, ""), validConfigEntry.getValue()));
         return out;
     }
 
@@ -81,7 +82,7 @@ public class AppConfig {
     public static boolean usesDsl(String[] appArgs) {
         if (appArgs != null && appArgs.length > 2) {
             String arg = appArgs[2];
-            if(!arg.equalsIgnoreCase("dsl") && !arg.equalsIgnoreCase("processor")) {
+            if (!arg.equalsIgnoreCase("dsl") && !arg.equalsIgnoreCase("processor")) {
                 throw new IllegalArgumentException("Only dsl or processor arguments are supported.");
             }
             return arg.equalsIgnoreCase("dsl");
@@ -90,23 +91,19 @@ public class AppConfig {
         }
     }
 
-    public static Properties producerConfig(String[] appArgs) throws IOException{
+    public static Properties producerConfig(final File inputFile) throws IOException {
         final Properties props = new Properties();
-       if (appArgs != null && appArgs.length > 0) {
-           try (final FileInputStream fis = new FileInputStream(appArgs[0])) {
-               props.load(fis);
-           }
-           if (appArgs.length > 3) {
-               System.out.println("Warning: Some command line arguments were ignored. This demo only accepts an optional configuration file.");
-           }
-       }
+
+        try (final FileInputStream fis = new FileInputStream(inputFile)) {
+            props.load(fis);
+        }
+
         props.putIfAbsent(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:19092");
         props.putIfAbsent(ProducerConfig.CLIENT_ID_CONFIG, "my-app");
         props.putIfAbsent(ProducerConfig.PARTITIONER_IGNORE_KEYS_CONFIG, "true");
-        //props.putIfAbsent(ProducerConfig.LINGER_MS_CONFIG, "50");
-        //props.putIfAbsent(ProducerConfig.BATCH_SIZE_CONFIG, "1000000");
-        props.putIfAbsent(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        props.putIfAbsent(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, BytesSerializer.class.getName());
+        props.putIfAbsent(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.putIfAbsent(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, BytesSerializer.class);
+
         return props;
     }
 

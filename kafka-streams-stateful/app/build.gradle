@@ -9,8 +9,14 @@ repositories {
 }
 
 var kafkaVersion = '3.8.1'
+var lombokVersion = '1.18.34'
 
 dependencies {
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -20,52 +26,22 @@ dependencies {
     implementation 'org.slf4j:slf4j-api:2.0.16'
     implementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.24.1'
 
+    implementation 'info.picocli:picocli:4.7.6'
     implementation 'com.google.guava:guava:33.3.1-jre'
-    implementation 'org.freemarker:freemarker:2.3.32'
-    implementation 'net.datafaker:datafaker:2.0.1'
+    implementation 'net.datafaker:datafaker:2.4.1'
     implementation 'io.javalin:javalin:6.3.0'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.3'
 }
 
-jar {
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
     }
-    from('src/main/resources') {
-        include 'templates/**/*.ftl'
-    }
-    duplicatesStrategy DuplicatesStrategy.INCLUDE
-    manifest {
-        attributes(
-            'Main-Class': 'io.littlehorse.simulations.stateful.app.App'
-        )
-    }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 application {
-    mainClassName = project.hasProperty("mainClass") ? project.getProperty("mainClass") : "NULL"
-}
-
-task runApp(type: JavaExec) {
-    mainClass = 'io.littlehorse.simulations.stateful.app.App'
-    def configFile = project.hasProperty('config') ? project.config : 'instance1.properties'
-    def port = project.hasProperty('port') ? project.port : '8080'
-    args = [configFile, port]
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-processResources {
-    duplicatesStrategy DuplicatesStrategy.INCLUDE
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDirs "src/main/resources", "src/main/configs"
-        }
-    }
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
+    mainClass = project.hasProperty('mainClass') ? project.property('mainClass').toString() : 'io.littlehorse.simulations.stateful.Main'
 }

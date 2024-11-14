@@ -1,7 +1,5 @@
 package io.littlehorse.simulations.stateful.app;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.ContentType;
 import io.javalin.http.Context;
 import org.apache.kafka.common.utils.Bytes;
@@ -23,7 +21,6 @@ public class HttpHandler {
 
     private final KafkaStreams streamsApp;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private final NumberFormat format = NumberFormat.getInstance();
     private final Logger logger = LoggerFactory.getLogger(HttpHandler.class);
     private final String storeName;
@@ -50,11 +47,9 @@ public class HttpHandler {
         }
 
         ctx.contentType(ContentType.APPLICATION_JSON);
-        try {
-            ctx.result(objectMapper.writeValueAsString(currentState));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+
+            ctx.json(currentState);
+
     }
 
 }

@@ -1,68 +1,59 @@
 package io.littlehorse.simulations.stateful.generator;
 
 import io.littlehorse.simulations.stateful.common.AppConfig;
-import net.datafaker.Faker;
-import net.datafaker.service.RandomService;
+import io.littlehorse.simulations.stateful.utils.Random;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.utils.Bytes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
 
-import java.io.IOException;
-import java.util.Properties;
+import java.io.File;
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
-public class FakeDataGenerator {
+@Slf4j
+@Command(name = "generator", description = "Generate fake messages.")
+public class FakeDataGenerator implements Runnable {
 
-    private static final Faker FAKER = new Faker();
-    private static final AtomicLong incrementer = new AtomicLong(0);
-    private static final AtomicLong lastLogTime = new AtomicLong(0);
-    private static final Logger log = LoggerFactory.getLogger(FakeDataGenerator.class);
+    @Option(names = {"-l", "--limit"}, defaultValue = "200000000", description = "Number of messages to produce. Default: ${DEFAULT-VALUE}.")
+    private long limit;
+    @Option(names = {"-f", "--fail"}, description = "Send a fail message.")
+    private boolean fail;
+    @Parameters(description = "Properties file path.")
+    private File configurations;
 
-    public static void main(String[] args) throws IOException {
-        boolean fail = false;
-        // TODO: add argument processor
-        if (args.length > 1) {
-            fail = true;
-        }
+    private ProducerRecord<String, Bytes> newRecord() {
+        return new ProducerRecord<>(AppConfig.INPUT_TOPIC, Random.key(), Random.bytes(5));
+    }
 
-        Properties properties = AppConfig.producerConfig(args);
-        try(Producer<String, Bytes> producer = new KafkaProducer<>(properties)){
-            if(!fail) {
-                Stream.generate(FakeDataGenerator::newRecord)
-                        .limit(200_000_000)
-                        .forEach(record -> {
-                            producer.send(record, (recordMetadata, e) -> incrementer.incrementAndGet());
-                        });
-            } else {
+    private ProducerRecord<String, Bytes> failSignal() {
+        return new ProducerRecord<>(AppConfig.INPUT_TOPIC, "fail", Random.bytes(5));
+    }
+
+    @SneakyThrows
+    @Override
+    public void run() {
+        try (Producer<String, Bytes> producer = new KafkaProducer<>(AppConfig.producerConfig(configurations))) {
+            if (fail) {
                 producer.send(failSignal());
+            } else {
+                try (Throttle throttle = new Throttle(Duration.ofSeconds(3), Duration.ofSeconds(10))) {
+                    AtomicLong incrementer = new AtomicLong(0);
+                    Stream.generate(this::newRecord)
+                            .limit(limit)
+                            .forEach(record -> {
+                                producer.send(record);
+                                log.debug("Produced messages: {}", incrementer.incrementAndGet());
+                                throttle.await(() -> log.info("Produced messages so far: {}", incrementer.get()));
+                            });
+                }
             }
-
         }
     }
-
-    private static ProducerRecord<String, Bytes> newRecord(){
-        RandomService random = FAKER.random();
-        byte[] randomBytes = random.nextRandomBytes(5);
-        String characterName = FAKER.starWars().character();
-        if((System.currentTimeMillis() - lastLogTime.get()) > 5000) {
-            lastLogTime.set(System.currentTimeMillis());
-            log.info(incrementer.get() + " Records sent");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {}
-        }
-        incrementer.incrementAndGet();
-        return new ProducerRecord<>(AppConfig.INPUT_TOPIC, characterName, Bytes.wrap(randomBytes));
-    }
-
-    private static ProducerRecord<String, Bytes> failSignal() {
-        RandomService random = FAKER.random();
-        byte[] randomBytes = random.nextRandomBytes(5);
-        return new ProducerRecord<>(AppConfig.INPUT_TOPIC, "fail", Bytes.wrap(randomBytes));
-    }
-
 }

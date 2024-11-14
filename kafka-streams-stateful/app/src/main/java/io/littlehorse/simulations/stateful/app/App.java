@@ -6,6 +6,7 @@ package io.littlehorse.simulations.stateful.app;
 
 import io.javalin.Javalin;
 import io.littlehorse.simulations.stateful.common.AppConfig;
+import io.littlehorse.simulations.stateful.utils.Random;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.serialization.Serdes;
@@ -78,7 +79,7 @@ public class App {
                 <String, Bytes, KeyValueStore<Bytes, byte[]>>as("dsl-store")
                 .withKeySerde(Serdes.String())
                 .withValueSerde(Serdes.Bytes());
-        source.groupByKey().aggregate(() -> new Bytes(new byte[0]), (key, value, aggregate) -> Util.randomBytes(), materialized);
+        source.groupByKey().aggregate(() -> new Bytes(new byte[0]), (key, value, aggregate) -> Random.bytes(), materialized);
         return builder.build();
     }
 
