@@ -24,12 +24,7 @@ public class Config {
     }
 
     public static Properties streams(final File file) throws IOException {
-        Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream(file)) {
-            props.load(fis);
-        }
-
-        props = filterByPrefix(props, STREAMS_CONFIG_PREFIX);
+        final Properties props = filterByPrefix(loadFromFile(file), STREAMS_CONFIG_PREFIX);
         props.putIfAbsent(StreamsConfig.CLIENT_ID_CONFIG, "my-app");
         props.putIfAbsent(StreamsConfig.APPLICATION_ID_CONFIG, "streams-number-aggregation-demo");
         props.putIfAbsent(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
@@ -47,8 +42,8 @@ public class Config {
         return props;
     }
 
-    private static Properties filterByPrefix(Properties props, String prefix) {
-        Properties out = new Properties();
+    private static Properties filterByPrefix(final Properties props, final String prefix) {
+        final Properties out = new Properties();
         props.entrySet().stream()
                 .filter(configEntry -> configEntry.getKey().toString().startsWith(prefix))
                 .forEach(validConfigEntry -> out.put(validConfigEntry.getKey().toString().replace(prefix, ""), validConfigEntry.getValue()));
@@ -56,31 +51,26 @@ public class Config {
     }
 
     public static int httpPort(final File file) throws IOException {
-        Properties props = new Properties();
-
-        try (FileInputStream fis = new FileInputStream(file)) {
-            props.load(fis);
-        }
-
-        props = filterByPrefix(props, HTTP_CONFIG_PREFIX);
+        final Properties props = filterByPrefix(loadFromFile(file), HTTP_CONFIG_PREFIX);
         props.putIfAbsent(SERVER_PORT, "8080");
-
         return Integer.parseInt(props.get(SERVER_PORT).toString());
     }
 
-    public static Properties producer(final File inputFile) throws IOException {
+    private static Properties loadFromFile(final File file) throws IOException {
         final Properties props = new Properties();
-
-        try (FileInputStream fis = new FileInputStream(inputFile)) {
+        try (FileInputStream fis = new FileInputStream(file)) {
             props.load(fis);
         }
+        return props;
+    }
 
+    public static Properties producer(final File file) throws IOException {
+        final Properties props = loadFromFile(file);
         props.putIfAbsent(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:19092");
         props.putIfAbsent(ProducerConfig.CLIENT_ID_CONFIG, "my-app");
         props.putIfAbsent(ProducerConfig.PARTITIONER_IGNORE_KEYS_CONFIG, "true");
         props.putIfAbsent(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.putIfAbsent(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, BytesSerializer.class);
-
         return props;
     }
 
