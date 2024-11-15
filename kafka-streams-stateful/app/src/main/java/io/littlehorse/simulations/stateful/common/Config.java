@@ -32,10 +32,6 @@ public class Config {
         props.putIfAbsent(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.Bytes().getClass().getName());
         props.putIfAbsent(StreamsConfig.STATE_DIR_CONFIG, "/tmp/streams-1");
         props.putIfAbsent(StreamsConfig.NUM_STANDBY_REPLICAS_CONFIG, 1);
-        props.putIfAbsent(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 500);
-        props.putIfAbsent(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.putIfAbsent(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 6000);
-        props.putIfAbsent(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, 360);
         props.putIfAbsent(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_V2);
         props.putIfAbsent(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 10);
         return props;
@@ -67,7 +63,7 @@ public class Config {
         final Properties props = loadFromFile(file);
         props.putIfAbsent(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:19092");
         props.putIfAbsent(ProducerConfig.CLIENT_ID_CONFIG, "my-app");
-        props.putIfAbsent(ProducerConfig.PARTITIONER_IGNORE_KEYS_CONFIG, "true");
+//        props.putIfAbsent(ProducerConfig.PARTITIONER_IGNORE_KEYS_CONFIG, "true");
         props.putIfAbsent(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.putIfAbsent(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, BytesSerializer.class);
         return props;

@@ -8,7 +8,7 @@ repositories {
     mavenCentral()
 }
 
-var kafkaVersion = '3.8.1'
+var kafkaVersion = '4.0.1'
 var lombokVersion = '1.18.34'
 
 dependencies {

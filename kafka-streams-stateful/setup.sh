@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/scripts/create-topics.sh 24 3 "input-topic" "output-topic"
+/scripts/create-topics.sh 72 2 "input-topic" "output-topic"
