@@ -1,5 +1,5 @@
 include:
-  - ../kafka/multinode.yml
+  - ../kafka/singlenode.yml
 services:
   setup:
     image: apache/kafka:${KAFKA_VERSION}

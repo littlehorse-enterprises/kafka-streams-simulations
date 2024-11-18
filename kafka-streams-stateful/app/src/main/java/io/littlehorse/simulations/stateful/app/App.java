@@ -17,6 +17,7 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.state.KeyValueBytesStoreSupplier;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
@@ -56,9 +57,11 @@ public class App implements Runnable {
         final Topology topology = new Topology();
         final StoreBuilder<KeyValueStore<String, Bytes>> processorStore = Stores.keyValueStoreBuilder(
                 Stores.persistentKeyValueStore(PROCESSOR_STORE_NAME), Serdes.String(), Serdes.Bytes());
+        KeyValueBytesStoreSupplier inMemoryKeyValueStore = Stores.inMemoryKeyValueStore(PROCESSOR_STORE_NAME);
         topology.addSource("input", Serdes.String().deserializer(), Serdes.Bytes().deserializer(), Config.INPUT_TOPIC);
         topology.addProcessor("random-value-processor", RandomValueProcessor::new, "input");
         topology.addStateStore(processorStore, "random-value-processor");
+//        topology.addStateStore(Stores.keyValueStoreBuilder(inMemoryKeyValueStore, Serdes.String(), Serdes.Bytes()), "random-value-processor");
         return topology;
     }
 

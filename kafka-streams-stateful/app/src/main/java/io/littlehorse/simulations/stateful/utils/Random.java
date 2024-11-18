@@ -16,7 +16,7 @@ public final class Random {
      * @return random 10KB - 20KB
      */
     public static Bytes bytes() {
-        return new Bytes(RANDOM.nextRandomBytes(RANDOM.nextInt(1000, 2000)));
+        return new Bytes(RANDOM.nextRandomBytes(RANDOM.nextInt(10_000, 20_000)));
     }
 
     public static Bytes bytes(final int size) {
