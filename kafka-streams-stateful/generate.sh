@@ -12,7 +12,7 @@ ARGUMENTS=""
 while [ $# -gt 0 ]; do
     case "$1" in
     --build)
-        ./gradlew clean installDist -x test
+        ../gradlew clean installDist -x test
         ;;
     --debug)
         export LOG_LEVEL="DEBUG"
@@ -31,4 +31,4 @@ if [ ! -f "${CONFIG_PATH}" ]; then
     exit 1
 fi
 
-./app/build/install/app/bin/app generator ${ARGUMENTS} ${CONFIG_PATH}
+./build/install/kafka-streams-stateful/bin/kafka-streams-stateful generator ${ARGUMENTS} ${CONFIG_PATH}

@@ -18,6 +18,7 @@ public class TopicCreator implements Closeable {
     private final AdminClient adminClient;
 
     public TopicCreator(final Properties configurations) {
+        log.info("Creating admin client" + configurations);
         adminClient = AdminClient.create(configurations);
         ShutdownHook.add(this);
     }

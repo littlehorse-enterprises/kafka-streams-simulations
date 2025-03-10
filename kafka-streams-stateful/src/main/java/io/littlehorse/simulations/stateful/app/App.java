@@ -13,6 +13,7 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler;
 import org.apache.kafka.streams.kstream.KStream;
@@ -79,7 +80,6 @@ public class App implements Runnable {
         streams.setGlobalStateRestoreListener(new AppRestoreListener());
 
         final StateExporter stateExporter = new StateExporter(Config.httpPort(configurations), streams, dsl ? DSL_STORE_NAME : PROCESSOR_STORE_NAME);
-
         final CountDownLatch latch = new CountDownLatch(2);
         ShutdownHook.add("API", () -> {
             stateExporter.close();

@@ -59,3 +59,15 @@ for n in {1..5}; do \
 ```shell
 kaskade admin -b localhost:19092
 ```
+
+
+### Inject latency into nginx container
+
+Create network emulation:
+```shell
+docker compose -f singlenode.yml exec nginx tc qdisc add dev eth0 root netem delay 0ms
+```
+Change latency:
+```shell
+docker compose -f singlenode.yml exec nginx tc qdisc change dev eth0 root netem delay 0ms
+```
